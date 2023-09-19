@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from "react";
+import "./App.css";
+import {
+  fetchProfile,
+  fetchTopArtists,
+  getAccessToken,
+  redirectToAuthCodeFlow,
+} from "./spotifyHelpers";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const code = new URLSearchParams(window.location.search).get("code");
+
+  useEffect(() => {
+    handleGetSpotifyInfo();
+  }, []);
+
+  const handleGetSpotifyInfo = async () => {
+    if (code) {
+      const accessToken = await getAccessToken(code);
+      const profile = await fetchProfile(accessToken);
+      const topArtists = await fetchTopArtists(accessToken);
+      console.log(profile, topArtists);
+
+      // TODO: send profile to backend
+    }
+  };
+
+  const handleAuth = async () => {
+    redirectToAuthCodeFlow();
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+      <h1>Spotify Matcher</h1>
+
+      {code && <p>code: {code}</p>}
+      {!code && (
+        <button
+          onClick={handleAuth}
+          style={{
+            background: "lightgreen",
+            color: "darkgreen",
+          }}
+        >
+          Logg inn med Spotify
         </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      )}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
