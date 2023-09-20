@@ -15,7 +15,7 @@ public class SpotifyUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String spotifyAccessToken;
+    private String accessToken;
 
     private String name;
 
