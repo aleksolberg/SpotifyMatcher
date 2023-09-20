@@ -1,4 +1,4 @@
-import { clientId } from "./const";
+import { clientId, redirectUri } from "../const";
 
 export async function redirectToAuthCodeFlow() {
   const verifier = generateCodeVerifier(128);
@@ -9,7 +9,7 @@ export async function redirectToAuthCodeFlow() {
   const params = new URLSearchParams();
   params.append("client_id", clientId);
   params.append("response_type", "code");
-  params.append("redirect_uri", "http://localhost:3000");
+  params.append("redirect_uri", redirectUri);
   params.append("scope", "user-read-private user-read-email user-top-read");
   params.append("code_challenge_method", "S256");
   params.append("code_challenge", challenge);
@@ -44,7 +44,7 @@ export async function getAccessToken(code: string): Promise<string> {
   params.append("client_id", clientId);
   params.append("grant_type", "authorization_code");
   params.append("code", code);
-  params.append("redirect_uri", "http://localhost:3000");
+  params.append("redirect_uri", redirectUri);
   params.append("code_verifier", verifier!);
 
   const result = await fetch("https://accounts.spotify.com/api/token", {
