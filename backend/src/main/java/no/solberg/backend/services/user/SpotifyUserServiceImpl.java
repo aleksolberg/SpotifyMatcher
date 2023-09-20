@@ -1,5 +1,6 @@
 package no.solberg.backend.services.user;
 
+import no.solberg.backend.exceptions.UserNotFoundException;
 import no.solberg.backend.models.SpotifyUser;
 import no.solberg.backend.repositories.SpotifyUserRepository;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,9 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
     }
 
     @Override
-    public SpotifyUser findById(Integer integer) {
-        return null;
+    public SpotifyUser findById(Integer id) {
+        return spotifyUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 
     @Override

@@ -2,7 +2,7 @@ package no.solberg.backend.controllers;
 
 import no.solberg.backend.mappers.SpotifyUserMapper;
 import no.solberg.backend.models.SpotifyUser;
-import no.solberg.backend.models.dtos.SpotifyUserGetDTO;
+import no.solberg.backend.models.dtos.SpotifyUserPostDTO;
 import no.solberg.backend.services.user.SpotifyUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +27,18 @@ public class SpotifyUserController {
                 spotifyUserMapper.spotifyUsersToSpotifyUserGetDTOs(spotifyUserService.findAll()));
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity findById(@PathVariable int id) {
+        return ResponseEntity.ok(
+                spotifyUserMapper.spotifyUserToSpotifyUserGetDTO(
+                        spotifyUserService.findById(id)
+                )
+        );
+    }
+
     @PostMapping
-    public ResponseEntity add(@RequestBody SpotifyUserGetDTO entity) throws URISyntaxException { // TODO: use different dto
-        SpotifyUser spotifyUser = spotifyUserService.add(spotifyUserMapper.spotifyUserGetDTOToSpotifyUser(entity));
+    public ResponseEntity add(@RequestBody SpotifyUserPostDTO entity) throws URISyntaxException { // TODO: use different dto
+        SpotifyUser spotifyUser = spotifyUserService.add(spotifyUserMapper.spotifyUserPostDTOToSpotifyUser(entity));
         URI uri = new URI("api/v1/users/" + spotifyUser.getId());
         return ResponseEntity.created(uri).build();
     }
