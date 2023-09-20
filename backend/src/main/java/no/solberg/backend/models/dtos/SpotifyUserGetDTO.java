@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UserGetDTO {
+public class SpotifyUserGetDTO {
     private String name;
 
     private String email;
