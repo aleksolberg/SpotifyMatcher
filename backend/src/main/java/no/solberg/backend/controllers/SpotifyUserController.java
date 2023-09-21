@@ -31,9 +31,7 @@ public class SpotifyUserController {
     @GetMapping("{id}")
     public ResponseEntity findById(@PathVariable int id) {
         return ResponseEntity.ok(
-                spotifyUserMapper.spotifyUserToSpotifyUserGetDTO(
-                        spotifyUserService.findById(id)
-                )
+                spotifyUserMapper.spotifyUserToSpotifyUserGetDTO(spotifyUserService.findById(id))
         );
     }
 
@@ -43,6 +41,16 @@ public class SpotifyUserController {
         URI uri = new URI("api/v1/users/" + spotifyUser.getId());
         return ResponseEntity.created(uri).build();
     }
+
+    // add top artists for a user. Artists must come in correct order.
+    @PutMapping ("{id}/artists")
+    public ResponseEntity addTopArtists(@PathVariable int id, @RequestBody String[] artistIds) {
+        spotifyUserService.addArtists(id, artistIds);
+        return ResponseEntity.noContent().build();
+    }
+
+    // TODO: Get artist for user
+    // TODO: Get genres for user
 
 
     // Post mapping, gets an array of artists  {"id", "name",  "genres", "popularity", "image_url", "external_url"}
