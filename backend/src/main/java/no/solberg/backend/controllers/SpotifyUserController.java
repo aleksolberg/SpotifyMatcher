@@ -2,8 +2,8 @@ package no.solberg.backend.controllers;
 
 import no.solberg.backend.mappers.SpotifyUserMapper;
 import no.solberg.backend.models.SpotifyUser;
-import no.solberg.backend.models.dtos.SpotifyUserPostDTO;
-import no.solberg.backend.services.user.SpotifyUserService;
+import no.solberg.backend.models.dtos.spotifyUser.SpotifyUserPostDTO;
+import no.solberg.backend.services.spotifyUser.SpotifyUserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +25,7 @@ public class SpotifyUserController {
     @GetMapping
     public ResponseEntity findAll() {
         return ResponseEntity.ok(
-                spotifyUserMapper.spotifyUsersToSpotifyUserGetDTOs(spotifyUserService.findAll()));
+                spotifyUserMapper.spotifyUsersToSpotifyUserListDTOs(spotifyUserService.findAll()));
     }
 
     @GetMapping("{id}")
@@ -43,4 +43,16 @@ public class SpotifyUserController {
         URI uri = new URI("api/v1/users/" + spotifyUser.getId());
         return ResponseEntity.created(uri).build();
     }
+
+
+    // Post mapping, gets an array of artists  {"id", "name",  "genres", "popularity", "image_url", "external_url"}
+    // Should check if artist exists already, update it? Add if not.
+    // Check if genres exists already, add if not
+    // Add artist-genre relationship
+    // Check if user exists, throw error if not
+    // Add user-artist relationship
+    /*@PostMapping("{id}/artists")
+    public ResponseEntity addTopArtists(@RequestBody ArtistPostDTO entity) {
+
+    }*/
 }

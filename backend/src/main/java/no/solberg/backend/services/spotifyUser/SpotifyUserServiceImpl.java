@@ -1,4 +1,4 @@
-package no.solberg.backend.services.user;
+package no.solberg.backend.services.spotifyUser;
 
 import no.solberg.backend.exceptions.UserNotFoundException;
 import no.solberg.backend.models.SpotifyUser;

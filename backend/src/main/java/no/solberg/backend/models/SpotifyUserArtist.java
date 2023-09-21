@@ -9,15 +9,16 @@ import lombok.Setter;
 @Setter
 public class SpotifyUserArtist {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @EmbeddedId
+    private SpotifyUserArtistId id;
 
     @ManyToOne
+    @MapsId("artistId")
     @JoinColumn(name = "artist_id")
     private Artist artist;
 
     @ManyToOne
+    @MapsId("spotifyUserId")
     @JoinColumn(name = "spotifyuser_id")
     private SpotifyUser spotifyUser;
 

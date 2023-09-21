@@ -14,11 +14,11 @@ public class SpotifyUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String accessToken;
-
     private String name;
 
     private String email;
+
+    private String accessToken;
 
     // Relationships
     @OneToMany(mappedBy = "spotifyUser")
