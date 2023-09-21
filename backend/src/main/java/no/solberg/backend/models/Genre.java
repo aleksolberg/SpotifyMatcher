@@ -9,18 +9,15 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-public class SpotifyUser {
+public class Genre {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private String accessToken;
-
-    private String name;
-
-    private String email;
+    private String genreName;
 
     // Relationships
-    @OneToMany(mappedBy = "spotifyUser")
-    private Set<SpotifyUserArtist> spotifyUserArtists;
+    @ManyToMany
+    private Set<Artist> artists;
 }
