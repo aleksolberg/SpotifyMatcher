@@ -5,7 +5,7 @@ import {
   getAccessToken,
 } from "../lib/spotifyHelpers";
 import "./../App.css";
-import { saveProfileData, saveTopArtists } from "../lib/backendHelpers";
+import { saveProfileData } from "../lib/backendHelpers";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
@@ -14,6 +14,7 @@ function Callback() {
 
   useEffect(() => {
     handleGetSpotifyInfo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGetSpotifyInfo = async () => {
@@ -25,8 +26,16 @@ function Callback() {
 
       // Save data to backend
       try {
-        await saveProfileData(profile);
-        await saveTopArtists(topArtists);
+        const { display_name, email } = profile;
+        await saveProfileData({
+          name: display_name,
+          email: email,
+          accessToken: accessToken,
+        });
+
+        // TODO: Lage endepunkt i backend som tar en liste med artister.
+        // Felter vi trenger på artister: id (string), name (string), genres (string[]), popularity (number), image_url (string), external_url(string)
+        // await saveTopArtists(topArtists);
       } catch (error) {
         console.log(error);
         setError("Kunne ikke lagre data til backend");
