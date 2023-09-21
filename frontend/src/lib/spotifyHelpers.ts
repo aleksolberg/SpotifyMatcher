@@ -67,7 +67,7 @@ export async function fetchProfile(token: string): Promise<any> {
 }
 
 export async function fetchTopArtists(token: string): Promise<any> {
-  const result = await fetch("https://api.spotify.com/v1/me/top/artist", {
+  const result = await fetch("https://api.spotify.com/v1/me/top/artists", {
     method: "GET",
     headers: { Authorization: `Bearer ${token}` },
   });

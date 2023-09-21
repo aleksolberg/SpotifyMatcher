@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @RestController
+@CrossOrigin("http://localhost:3000")
 @RequestMapping("api/v1/users")
 public class SpotifyUserController {
     private final SpotifyUserService spotifyUserService;

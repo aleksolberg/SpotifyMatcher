@@ -1,8 +1,8 @@
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
-import Index from "./pages /Index";
-import Callback from "./pages /Callback";
+import Index from "./pages/Index";
+import Callback from "./pages/Callback";
 
 const router = createBrowserRouter([
   {
