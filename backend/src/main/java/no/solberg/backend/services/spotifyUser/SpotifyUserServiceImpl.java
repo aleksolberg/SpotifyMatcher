@@ -1,17 +1,21 @@
 package no.solberg.backend.services.spotifyUser;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import no.solberg.backend.exceptions.ArtistNotFoundException;
 import no.solberg.backend.exceptions.UserNotFoundException;
+import no.solberg.backend.mappers.ArtistMapper;
 import no.solberg.backend.models.Artist;
 import no.solberg.backend.models.SpotifyUser;
 import no.solberg.backend.models.SpotifyUserArtist;
 import no.solberg.backend.models.SpotifyUserArtistId;
+import no.solberg.backend.models.dtos.artist.ArtistPostDTO;
 import no.solberg.backend.repositories.ArtistRepository;
 import no.solberg.backend.repositories.SpotifyUserArtistRepository;
 import no.solberg.backend.repositories.SpotifyUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 @Service
@@ -19,17 +23,20 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
     private final SpotifyUserRepository spotifyUserRepository;
     private final ArtistRepository artistRepository;
     private final SpotifyUserArtistRepository spotifyUserArtistRepository;
+    private final ArtistMapper artistMapper;
 
     public SpotifyUserServiceImpl(SpotifyUserRepository spotifyUserRepository,
                                   ArtistRepository artistRepository,
-                                  SpotifyUserArtistRepository spotifyUserArtistRepository) {
+                                  SpotifyUserArtistRepository spotifyUserArtistRepository,
+                                  ArtistMapper artistMapper) {
         this.spotifyUserRepository = spotifyUserRepository;
         this.artistRepository = artistRepository;
         this.spotifyUserArtistRepository = spotifyUserArtistRepository;
+        this.artistMapper = artistMapper;
     }
 
     @Override
-    public SpotifyUser findById(Integer id) {
+    public SpotifyUser findById(String id) {
         return spotifyUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
@@ -46,7 +53,7 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
 
     @Transactional
     @Override
-    public void addArtists(int id, String[] artistIds) {
+    public void addArtists(String id, String[] artistIds) {
         SpotifyUser spotifyUser = spotifyUserRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
@@ -63,5 +70,26 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
 
             spotifyUserArtistRepository.save(spotifyUserArtist);
         }
+    }
+
+    @Transactional
+    @Override
+    public void addArtists(String id, ArtistPostDTO[] artists) {
+        String[] artistIds = new String[artists.length];
+
+        for (int i = 0; i < artists.length; i++) {
+            // check if artist exists in db, add it if not
+            ArtistPostDTO artistPostDTO = artists[i];
+            String artistId = artistPostDTO.getArtistId();
+            try {
+                Artist artistInDatabase = artistRepository.findById(artistId)
+                        .orElseThrow(() -> new ArtistNotFoundException(artistId));
+            } catch(Exception e) {
+                Artist artistToSave = artistMapper.artistPostDTOToArtist(artistPostDTO);
+                artistRepository.save(artistToSave);
+            }
+            artistIds[i] = artistId;
+        }
+        addArtists(id, artistIds);
     }
 }

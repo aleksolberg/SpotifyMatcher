@@ -14,5 +14,5 @@ public class ArtistGetDTO {
     private int popularity;
     private URL imageUrl;
     private URL externalUrl;
-    private Set<Integer> spotifyUserIds;
+    private Set<String> spotifyUserIds;
 }

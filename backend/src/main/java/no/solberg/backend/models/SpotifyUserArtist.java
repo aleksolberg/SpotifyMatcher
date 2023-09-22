@@ -19,7 +19,7 @@ public class SpotifyUserArtist {
 
     @ManyToOne
     @MapsId("spotifyUserId")
-    @JoinColumn(name = "spotifyuser_id")
+    @JoinColumn(name = "spotify_user_id")
     private SpotifyUser spotifyUser;
 
     private int artistRank;

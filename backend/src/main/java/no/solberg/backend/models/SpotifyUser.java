@@ -11,8 +11,7 @@ import java.util.Set;
 @Setter
 public class SpotifyUser {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private String spotifyUserId;
 
     private String name;
 

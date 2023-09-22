@@ -29,5 +29,5 @@ public interface SpotifyUserMapper {
 
     Collection<SpotifyUserListDTO>  spotifyUsersToSpotifyUserListDTOs(Collection<SpotifyUser> spotifyUsers);
 
-    SpotifyUser spotifyUserPostDTOToSpotifyUser(SpotifyUserPostDTO spotifyUserPostDTO); // TODO: Use different DTO
+    SpotifyUser spotifyUserPostDTOToSpotifyUser(SpotifyUserPostDTO spotifyUserPostDTO);
 }

@@ -26,8 +26,9 @@ function Callback() {
 
       // Save data to backend
       try {
-        const { display_name, email } = profile;
+        const {id, display_name, email} = profile;
         await saveProfileData({
+          spotifyUserId: id,
           name: display_name,
           email: email,
           accessToken: accessToken,

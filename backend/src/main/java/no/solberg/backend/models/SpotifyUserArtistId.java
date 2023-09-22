@@ -8,12 +8,12 @@ import java.util.Objects;
 @Embeddable
 public class SpotifyUserArtistId implements Serializable {
 
-    private int spotifyUserId;
+    private String spotifyUserId;
     private String artistId;
 
     public SpotifyUserArtistId() {}
 
-    public SpotifyUserArtistId(int spotifyUserId, String artistId) {
+    public SpotifyUserArtistId(String spotifyUserId, String artistId) {
         this.artistId = artistId;
         this.spotifyUserId = spotifyUserId;
     }

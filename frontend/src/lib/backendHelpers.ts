@@ -1,6 +1,7 @@
 import { backendUrl } from "../const";
 
 type ProfileData = {
+  spotifyUserId: string,
   name: string;
   email: string;
   accessToken: string;
@@ -11,7 +12,6 @@ type TopArtists = {
   name: string;
 }[];
 
-// TODO: Check if user exists in database already, update access token if necessary
 export const saveProfileData = async (profileData: ProfileData) => {
   return await fetch(backendUrl + "/users", {
     method: "POST",
@@ -22,9 +22,12 @@ export const saveProfileData = async (profileData: ProfileData) => {
   });
 };
 
-export const saveTopArtists = async (topArtists: TopArtists) => {
-  return await fetch(backendUrl + "/top-artists", {
+export const saveTopArtists = async (userId: String, topArtists: TopArtists) => {
+  return await fetch(`${backendUrl}/${userId}/artists`, {
     method: "POST",
+    headers: {
+      'Content-Type': 'application/json'
+    },
     body: JSON.stringify(topArtists),
   });
 };

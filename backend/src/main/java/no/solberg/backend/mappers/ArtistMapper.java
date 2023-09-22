@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface ArtistMapper {
     @Named(value = "spotifyUserArtistsToSpotifyUserIds")
-    default Set<Integer> map(Set<SpotifyUserArtist> value) {
+    default Set<String> map(Set<SpotifyUserArtist> value) {
         if(value == null)
             return null;
         return value.stream()
                 .map(SpotifyUserArtist::getSpotifyUser)
-                .map(SpotifyUser::getId)
+                .map(SpotifyUser::getSpotifyUserId)
                 .collect(Collectors.toSet());
     }
 
