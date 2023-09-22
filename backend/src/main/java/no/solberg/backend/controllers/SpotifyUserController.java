@@ -1,5 +1,6 @@
 package no.solberg.backend.controllers;
 
+import jakarta.validation.Valid;
 import no.solberg.backend.mappers.SpotifyUserMapper;
 import no.solberg.backend.models.SpotifyUser;
 import no.solberg.backend.models.dtos.artist.ArtistPostDTO;
@@ -38,7 +39,7 @@ public class SpotifyUserController {
 
     // TODO: Check if user exists in database already, update access token if necessary
     @PostMapping
-    public ResponseEntity add(@RequestBody SpotifyUserPostDTO entity) throws URISyntaxException {
+    public ResponseEntity add(@Valid @RequestBody SpotifyUserPostDTO entity) throws URISyntaxException {
         SpotifyUser spotifyUser = spotifyUserService.add(spotifyUserMapper.spotifyUserPostDTOToSpotifyUser(entity));
         URI uri = new URI("api/v1/users/" + spotifyUser.getSpotifyUserId());
         return ResponseEntity.created(uri).build();

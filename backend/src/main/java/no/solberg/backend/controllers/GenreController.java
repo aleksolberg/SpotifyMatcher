@@ -1,5 +1,6 @@
 package no.solberg.backend.controllers;
 
+import jakarta.validation.Valid;
 import no.solberg.backend.mappers.GenreMapper;
 import no.solberg.backend.models.Genre;
 import no.solberg.backend.models.dtos.genre.GenrePostDTO;
@@ -37,7 +38,7 @@ public class GenreController {
     }
 
     @PostMapping
-    private ResponseEntity add(@RequestBody GenrePostDTO entity) throws URISyntaxException {
+    private ResponseEntity add(@Valid @RequestBody GenrePostDTO entity) throws URISyntaxException {
         Genre genre = genreService.add(genreMapper.genrePostDTOToGenre(entity));
         URI uri = new URI("api/v1/genres" + genre.getId());
         return ResponseEntity.created(uri).build();

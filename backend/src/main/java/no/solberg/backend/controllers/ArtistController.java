@@ -1,5 +1,6 @@
 package no.solberg.backend.controllers;
 
+import jakarta.validation.Valid;
 import no.solberg.backend.mappers.ArtistMapper;
 import no.solberg.backend.models.Artist;
 import no.solberg.backend.models.dtos.artist.ArtistPostDTO;
@@ -37,7 +38,7 @@ public class ArtistController {
     }
 
     @PostMapping
-    public ResponseEntity add(@RequestBody ArtistPostDTO entity) throws URISyntaxException {
+    public ResponseEntity add(@Valid @RequestBody ArtistPostDTO entity) throws URISyntaxException {
         Artist artist = artistService.add(artistMapper.artistPostDTOToArtist(entity));
         URI uri = new URI("api/v1/artists/" + artist.getArtistId());
         return ResponseEntity.created(uri).build();
