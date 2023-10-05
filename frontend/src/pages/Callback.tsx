@@ -33,7 +33,13 @@ function Callback() {
             accessToken: accessToken,
           });
 
-          await saveTopArtists(id, topArtists.items);
+          const mappedArtists = topArtists.items.map((artist) => ({
+            artistId: artist.id,
+            artistName: artist.name,
+            ...artist,
+          }));
+
+          await saveTopArtists(id, mappedArtists);
         } catch (error) {
           console.log(error);
           setError("Kunne ikke lagre data til backend");
