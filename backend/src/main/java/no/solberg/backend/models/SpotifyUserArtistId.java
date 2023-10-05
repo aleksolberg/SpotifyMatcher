@@ -24,7 +24,7 @@ public class SpotifyUserArtistId implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SpotifyUserArtistId that = (SpotifyUserArtistId) o;
-        return spotifyUserId == that.spotifyUserId && artistId == that.artistId;
+        return Objects.equals(spotifyUserId, that.spotifyUserId) && Objects.equals(artistId, that.artistId);
     }
 
     @Override

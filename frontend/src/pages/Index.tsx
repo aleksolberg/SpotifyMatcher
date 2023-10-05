@@ -1,5 +1,4 @@
 import { redirectToAuthCodeFlow } from "../lib/spotifyHelpers";
-import "./../App.css";
 
 function Index() {
   const handleAuth = async () => {

@@ -1,6 +1,7 @@
 package no.solberg.backend.controllers;
 
 import jakarta.validation.Valid;
+import no.solberg.backend.mappers.ArtistMapper;
 import no.solberg.backend.mappers.SpotifyUserMapper;
 import no.solberg.backend.models.SpotifyUser;
 import no.solberg.backend.models.dtos.artist.ArtistPostDTO;
@@ -18,10 +19,12 @@ import java.net.URISyntaxException;
 public class SpotifyUserController {
     private final SpotifyUserService spotifyUserService;
     private final SpotifyUserMapper spotifyUserMapper;
+    private final ArtistMapper artistMapper;
 
-    public SpotifyUserController(SpotifyUserService spotifyUserService, SpotifyUserMapper spotifyUserMapper) {
+    public SpotifyUserController(SpotifyUserService spotifyUserService, SpotifyUserMapper spotifyUserMapper, ArtistMapper artistMapper) {
         this.spotifyUserService = spotifyUserService;
         this.spotifyUserMapper = spotifyUserMapper;
+        this.artistMapper = artistMapper;
     }
 
     @GetMapping
@@ -37,7 +40,13 @@ public class SpotifyUserController {
         );
     }
 
-    // TODO: Check if user exists in database already, update access token if necessary
+    @GetMapping("{id}/artists")
+    public ResponseEntity findTopArtists(@PathVariable String id) {
+        return ResponseEntity.ok(
+                artistMapper.artistsToArtistListDTOs(spotifyUserService.findTopArtists(id))
+        );
+    }
+
     @PostMapping
     public ResponseEntity add(@Valid @RequestBody SpotifyUserPostDTO entity) throws URISyntaxException {
         SpotifyUser spotifyUser = spotifyUserService.add(spotifyUserMapper.spotifyUserPostDTOToSpotifyUser(entity));
@@ -45,17 +54,15 @@ public class SpotifyUserController {
         return ResponseEntity.created(uri).build();
     }
 
-    // add top artists for a user. Artists must come in correct order.
+    // Updates top artists for a user by giving an array of artistIds
     @PutMapping ("{id}/artists")
     public ResponseEntity addTopArtists(@PathVariable String id, @RequestBody String[] artistIds) {
         spotifyUserService.addArtists(id, artistIds);
         return ResponseEntity.noContent().build();
     }
 
-    // TODO: Get artist for user
-    // TODO: Get genres for user
-    // TODO: Add genres when artist is added
-
+    // Adds a users top artists with the artist information
+    // TODO: Add genres as well
     @PostMapping("{id}/artists")
     public ResponseEntity addTopArtists(@PathVariable String id, @RequestBody ArtistPostDTO[] entity) {
         spotifyUserService.addArtists(id, entity);

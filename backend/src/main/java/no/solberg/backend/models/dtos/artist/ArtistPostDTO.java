@@ -17,4 +17,5 @@ public class ArtistPostDTO {
     private int popularity;
     private URL imageUrl;
     private URL externalUrl;
+    private String[] genreNames;
 }
