@@ -9,7 +9,7 @@ import {
   fetchTopArtists,
   getAccessToken,
 } from "../lib/spotifyHelpers";
-import { compareUrl, frontendBaseUrl } from "../const";
+import { frontendBaseUrl } from "../const";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
