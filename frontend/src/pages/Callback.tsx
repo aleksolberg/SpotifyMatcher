@@ -4,8 +4,7 @@ import {
   fetchTopArtists,
   getAccessToken,
 } from "../lib/spotifyHelpers";
-import "./../App.css";
-import { saveProfileData } from "../lib/backendHelpers";
+import { saveProfileData, saveTopArtists } from "../lib/backendHelpers";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
@@ -22,25 +21,26 @@ function Callback() {
       const accessToken = await getAccessToken(code);
       const profile = await fetchProfile(accessToken);
       const topArtists = await fetchTopArtists(accessToken);
-      console.log(profile, topArtists);
 
-      // Save data to backend
-      try {
-        const {id, display_name, email} = profile;
-        await saveProfileData({
-          spotifyUserId: id,
-          name: display_name,
-          email: email,
-          accessToken: accessToken,
-        });
+      if (profile && topArtists) {
+        // Save data to backend
+        try {
+          const { id, display_name, email } = profile;
+          await saveProfileData({
+            spotifyUserId: id,
+            name: display_name,
+            email: email,
+            accessToken: accessToken,
+          });
 
-        // TODO: Lage endepunkt i backend som tar en liste med artister.
-        // Felter vi trenger på artister: id (string), name (string), genres (string[]), popularity (number), image_url (string), external_url(string)
-        // await saveTopArtists(topArtists);
-      } catch (error) {
-        console.log(error);
-        setError("Kunne ikke lagre data til backend");
+          await saveTopArtists(id, topArtists.items);
+        } catch (error) {
+          console.log(error);
+          setError("Kunne ikke lagre data til backend");
+        }
       }
+    } else {
+      setError("Fikk ingen kode fra Spotify");
     }
   };
 

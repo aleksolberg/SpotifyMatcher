@@ -1,5 +1,14 @@
 import { clientId, redirectUri } from "../const";
 
+async function generateCodeChallenge(codeVerifier: string) {
+  const data = new TextEncoder().encode(codeVerifier);
+  const digest = await window.crypto.subtle.digest("SHA-256", data);
+  return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+}
+
 export async function redirectToAuthCodeFlow() {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
@@ -26,15 +35,6 @@ function generateCodeVerifier(length: number) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
   return text;
-}
-
-async function generateCodeChallenge(codeVerifier: string) {
-  const data = new TextEncoder().encode(codeVerifier);
-  const digest = await window.crypto.subtle.digest("SHA-256", data);
-  return btoa(String.fromCharCode.apply(null, [...new Uint8Array(digest)]))
-    .replace(/\+/g, "-")
-    .replace(/\//g, "_")
-    .replace(/=+$/, "");
 }
 
 export async function getAccessToken(code: string): Promise<string> {
@@ -67,9 +67,12 @@ export async function fetchProfile(token: string): Promise<any> {
 }
 
 export async function fetchTopArtists(token: string): Promise<any> {
-  const result = await fetch("https://api.spotify.com/v1/me/top/artists", {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  });
+  const result = await fetch(
+    "https://api.spotify.com/v1/me/top/artists?limit=50&time_range=long_term",
+    {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
   return await result.json();
 }
