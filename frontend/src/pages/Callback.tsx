@@ -9,7 +9,7 @@ import {
   fetchTopArtists,
   getAccessToken,
 } from "../lib/spotifyHelpers";
-import { compareUrl } from "../const";
+import { compareUrl, frontendBaseUrl } from "../const";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
@@ -24,9 +24,7 @@ function Callback() {
     email: string;
   } | null>(null);
 
-  const [topArtists, setTopArtists] = useState<any[] | null>(null);
-
-  console.log({ topArtists });
+  const [artistsInCommon, setArtistsInCommon] = useState<any>(null);
 
   useEffect(() => {
     handleGetSpotifyInfo();
@@ -63,7 +61,7 @@ function Callback() {
             const res = await compareArtists(id, compareWithUserName);
             const data = await res.json();
 
-            setTopArtists(data);
+            setArtistsInCommon(data);
           }
         } catch (error) {
           console.log(error);
@@ -75,7 +73,7 @@ function Callback() {
     }
   };
 
-  const shareUrl = compareUrl + "?user=" + profile?.id;
+  const shareUrl = frontendBaseUrl + "?compareWithUserName=" + profile?.id;
 
   return (
     <>
@@ -114,6 +112,18 @@ function Callback() {
           >
             ← Tilbake til forsiden
           </a>
+        </>
+      )}
+      {artistsInCommon && (
+        <>
+          <h2>Artister du har til felles med {compareWithUserName}</h2>
+          <ul>
+            {artistsInCommon.map((artist: any) => (
+              <li key={artist.id}>
+                <a href={artist.external_urls.spotify}>{artist.name}</a>
+              </li>
+            ))}
+          </ul>
         </>
       )}
     </>
