@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  compareArtists,
   saveProfileData,
   saveTopArtists,
 } from "../lib/backendHelpers";
@@ -9,7 +8,7 @@ import {
   fetchTopArtists,
   getAccessToken,
 } from "../lib/spotifyHelpers";
-import { compareUrl, frontendBaseUrl } from "../const";
+import { frontendBaseUrl } from "../const";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
@@ -119,8 +118,11 @@ function Callback() {
           <h2>Artister du har til felles med {compareWithUserName}</h2>
           <ul>
             {artistsInCommon.map((artist: any) => (
-              <li key={artist.id}>
-                <a href={artist.external_urls.spotify}>{artist.name}</a>
+              <li key={artist.artistId}>
+                <p>{artist.artistName}</p>
+                <span>{compareWithUserName} sin plassering: {artist.userBRank}</span>
+                <span>{profile?.display_name} sin plassering: {artist.userARank}</span>
+
               </li>
             ))}
           </ul>
