@@ -3,6 +3,7 @@ package no.solberg.backend.models.dtos.spotifyUser;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Set;
 
 @Getter
@@ -12,5 +13,5 @@ public class SpotifyUserGetDTO {
     private String name;
     private String email;
     private String accessToken;
-    private Set<String> artistIds;
+    private HashMap<Integer, String> topArtistIds;
 }

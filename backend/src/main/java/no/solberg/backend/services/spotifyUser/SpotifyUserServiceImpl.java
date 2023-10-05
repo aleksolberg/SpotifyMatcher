@@ -15,8 +15,7 @@ import no.solberg.backend.repositories.SpotifyUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 @Service
 public class SpotifyUserServiceImpl implements SpotifyUserService {
@@ -44,6 +43,19 @@ public class SpotifyUserServiceImpl implements SpotifyUserService {
     @Override
     public Collection<SpotifyUser> findAll() {
         return spotifyUserRepository.findAll();
+    }
+
+    @Override
+    public HashMap<Integer, Artist> findTopArtists(String id) {
+        SpotifyUser spotifyUser = spotifyUserRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        Set<SpotifyUserArtist> spotifyUserArtists = spotifyUser.getSpotifyUserArtists();
+
+        HashMap<Integer, Artist> result = new HashMap<Integer, Artist>();
+        for (SpotifyUserArtist spotifyUserArtist : spotifyUserArtists) {
+            result.put(spotifyUserArtist.getArtistRank(), spotifyUserArtist.getArtist());
+        }
+        return result;
     }
 
     @Override
