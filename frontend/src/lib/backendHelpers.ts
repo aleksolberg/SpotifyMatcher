@@ -34,3 +34,10 @@ export const saveTopArtists = async (
     body: JSON.stringify(topArtists),
   });
 };
+
+export const compareArtists = async (userA: string, userB: string) => {
+  return await fetch(`${backendUrl}/compare?user_a=${userA}&user_b=${userB}`, {
+    method: "GET",
+    headers,
+  });
+};

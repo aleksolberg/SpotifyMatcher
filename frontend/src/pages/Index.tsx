@@ -1,9 +1,11 @@
 import { redirectToAuthCodeFlow } from "../lib/spotifyHelpers";
-import "./../App.css";
 
 function Index() {
+  const compareWithUserName = new URLSearchParams(window.location.search).get(
+    "compareWithUserName"
+  );
   const handleAuth = async () => {
-    redirectToAuthCodeFlow();
+    redirectToAuthCodeFlow(compareWithUserName);
   };
 
   return (

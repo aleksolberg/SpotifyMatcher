@@ -1,15 +1,32 @@
 import { useEffect, useState } from "react";
 import {
+  compareArtists,
+  saveProfileData,
+  saveTopArtists,
+} from "../lib/backendHelpers";
+import {
   fetchProfile,
   fetchTopArtists,
   getAccessToken,
 } from "../lib/spotifyHelpers";
-import { saveProfileData, saveTopArtists } from "../lib/backendHelpers";
+import { compareUrl } from "../const";
 
 function Callback() {
   const code = new URLSearchParams(window.location.search).get("code");
+  const compareWithUserName = new URLSearchParams(window.location.search).get(
+    "state"
+  );
 
   const [error, setError] = useState<string | null>(null);
+  const [profile, setProfile] = useState<{
+    id: string;
+    display_name: string;
+    email: string;
+  } | null>(null);
+
+  const [topArtists, setTopArtists] = useState<any[] | null>(null);
+
+  console.log({ topArtists });
 
   useEffect(() => {
     handleGetSpotifyInfo();
@@ -23,6 +40,7 @@ function Callback() {
       const topArtists = await fetchTopArtists(accessToken);
 
       if (profile && topArtists) {
+        setProfile(profile);
         // Save data to backend
         try {
           const { id, display_name, email } = profile;
@@ -40,6 +58,13 @@ function Callback() {
           }));
 
           await saveTopArtists(id, mappedArtists);
+          console.log({ id, compareWithUserName });
+          if (compareWithUserName) {
+            const res = await compareArtists(id, compareWithUserName);
+            const data = await res.json();
+
+            setTopArtists(data);
+          }
         } catch (error) {
           console.log(error);
           setError("Kunne ikke lagre data til backend");
@@ -50,9 +75,20 @@ function Callback() {
     }
   };
 
+  const shareUrl = compareUrl + "?user=" + profile?.id;
+
   return (
     <>
-      {code && <p>code: {code}</p>}
+      <a href="/">← Tilbake</a>
+      {code && (
+        <div>
+          Du er logget inn {profile?.display_name}!
+          <p>
+            Del din profil med andre ved å sende dem denne linken:{" "}
+            <a href={shareUrl}>{shareUrl}</a>
+          </p>
+        </div>
+      )}
       {error && (
         <p
           style={{
@@ -73,8 +109,6 @@ function Callback() {
             style={{
               background: "lightgreen",
               color: "darkgreen",
-              padding: "10px",
-              borderRadius: "5px",
             }}
             href="/"
           >

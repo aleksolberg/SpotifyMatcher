@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import Index from "./pages/Index";
 import Callback from "./pages/Callback";
+import Compare from "./pages/Compare";
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,10 @@ const router = createBrowserRouter([
   {
     path: "/callback",
     element: <Callback />,
+  },
+  {
+    path: "/compare",
+    element: <Compare />,
   },
 ]);
 

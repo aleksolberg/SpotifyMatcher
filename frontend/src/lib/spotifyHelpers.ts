@@ -9,7 +9,9 @@ async function generateCodeChallenge(codeVerifier: string) {
     .replace(/=+$/, "");
 }
 
-export async function redirectToAuthCodeFlow() {
+export async function redirectToAuthCodeFlow(
+  compareWithUserName: string | null
+) {
   const verifier = generateCodeVerifier(128);
   const challenge = await generateCodeChallenge(verifier);
 
@@ -22,6 +24,9 @@ export async function redirectToAuthCodeFlow() {
   params.append("scope", "user-read-private user-read-email user-top-read");
   params.append("code_challenge_method", "S256");
   params.append("code_challenge", challenge);
+  if (compareWithUserName) {
+    params.append("state", compareWithUserName);
+  }
 
   document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
