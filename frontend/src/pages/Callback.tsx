@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {
+  compareArtists,
   saveProfileData,
   saveTopArtists,
 } from "../lib/backendHelpers";
